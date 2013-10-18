@@ -11,10 +11,12 @@
 
 @interface AJKBookDataController ()
 
-// need some temporary strings/dictionary here to contain book data
-@property (copy) NSString *elementName;
+// when current book uses the copy exception are thrown in addBookToList
+@property (nonatomic) AJKBook  *currentBook;
+@property (nonatomic, copy) NSString *currentValue;
 
 - (void)populateBookList;
+- (void)addBookToBookList;
 
 @end
 
@@ -25,21 +27,12 @@
     self = [super init];
     if (self) {
         _bookList = [[NSMutableArray alloc] init];
+        _currentBook = [[AJKBook alloc] init];
+        _currentValue = [[NSString alloc] init];
         [self populateBookList];
         return self;
     }
     return nil;
-}
-
-- (void)populateBookList
-{
-    // i probably could have pointed this to a local directory as well
-    NSURL *url = [NSURL URLWithString:@"https://sites.google.com/site/iphonesdktutorials/xml/Books.xml"];
-    
-    NSXMLParser *parser = [[NSXMLParser alloc] initWithContentsOfURL:url];
-    
-    [parser setDelegate:self];
-    [parser parse];
 }
 
 - (void)setBookList:(NSMutableArray *)bookList
@@ -48,6 +41,25 @@
     if (_bookList != bookList) {
         _bookList = [bookList mutableCopy];
     }
+}
+
+- (void)populateBookList
+{
+    // i probably could have pointed this to a local directory
+    NSURL *url = [NSURL URLWithString:@"https://sites.google.com/site/iphonesdktutorials/xml/Books.xml"];
+    
+    NSXMLParser *parser = [[NSXMLParser alloc] initWithContentsOfURL:url];
+    
+    [parser setDelegate:self];
+    [parser parse];
+    
+    NSLog(@"%@", [self.bookList description]);
+}
+
+- (void)addBookToBookList
+{
+    [self.bookList addObject:self.currentBook];
+    self.currentBook = [[AJKBook alloc] init];
 }
 
 - (NSUInteger)booksInBookList
@@ -64,18 +76,31 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
-    // NSLog(@"%@", elementName);
-    self.elementName = elementName;
+    if ([elementName isEqualToString:@"Book"]) {
+        // [self.currentBook bookID:[[attrubuteDict objectForKey:@"id"] integerValue]];
+        self.currentBook.bookID = [[attributeDict objectForKey:@"id"] integerValue];
+    }
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-    NSLog(@"%@ %@", self.elementName, string);
+    self.currentValue = [self.currentValue stringByAppendingString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
-    // NSLog(@"%@", elementName);
+    if ([elementName isEqualToString:@"title"]) {
+        // [self.currentBook title:self.currentValue];
+        self.currentBook.title = self.currentValue;
+    } else if ([elementName isEqualToString:@"author"]) {
+        self.currentBook.author = self.currentValue;
+    } else if ([elementName isEqualToString:@"summary"]) {
+        self.currentBook.summary = self.currentValue;
+    } else if ([elementName isEqualToString:@"Book"]) {
+        [self addBookToBookList];
+    }
+    
+    self.currentValue = [NSString stringWithFormat:@""];
 }
 
 @end
