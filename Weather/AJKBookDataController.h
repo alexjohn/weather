@@ -12,7 +12,8 @@
 
 @interface AJKBookDataController : NSObject <NSXMLParserDelegate>
 
-@property (nonatomic, copy) NSMutableArray *bookList;
+// Only nonatomic properties allow mixing and matching custom and synthesized accessors
+@property (nonatomic) NSMutableArray *bookList;
 
 - (NSUInteger)booksInBookList;
 - (AJKBook *)bookAtIndex:(NSUInteger)index;

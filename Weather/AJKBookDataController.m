@@ -12,8 +12,8 @@
 @interface AJKBookDataController ()
 
 // when current book uses the copy exception are thrown in addBookToList
-@property (nonatomic) AJKBook  *currentBook;
-@property (nonatomic, copy) NSString *currentValue;
+@property AJKBook  *currentBook;
+@property (copy) NSString *currentValue;
 
 - (void)populateBookList;
 - (void)addBookToBookList;
@@ -41,6 +41,7 @@
     if (_bookList != bookList) {
         _bookList = [bookList mutableCopy];
     }
+    // copy attribute keeps an NSString immutable, get it?
 }
 
 - (void)populateBookList
