@@ -7,6 +7,7 @@
 //
 
 #import "AJKDetailViewController.h"
+#import "AJKBook.h"
 
 @interface AJKDetailViewController ()
 - (void)configureView;
@@ -16,10 +17,10 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setBook:(AJKBook *)newBook
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
+    if (_book != newBook) {
+        _book = newBook;
         
         // Update the view.
         [self configureView];
@@ -29,9 +30,12 @@
 - (void)configureView
 {
     // Update the user interface for the detail item.
-
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
+    AJKBook *theBook = self.book;
+    
+    if (theBook) {
+        self.bookTitle.text = theBook.title;
+        self.bookAuthor.text = theBook.author;
+        self.bookSummary.text = theBook.summary;
     }
 }
 

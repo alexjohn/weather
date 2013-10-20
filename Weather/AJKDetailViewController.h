@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AJKDetailViewController : UIViewController
+@class AJKBook;
 
-@property (strong, nonatomic) id detailItem;
+@interface AJKDetailViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (strong, nonatomic) AJKBook *book;
+@property (weak, nonatomic) IBOutlet UILabel *bookTitle;
+@property (weak, nonatomic) IBOutlet UILabel *bookAuthor;
+@property (weak, nonatomic) IBOutlet UILabel *bookSummary;
+
 @end

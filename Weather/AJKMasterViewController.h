@@ -12,6 +12,6 @@
 
 @interface AJKMasterViewController : UITableViewController
 
-@property (strong, nonatomic) AJKBookDataController *dataController;
+@property (nonatomic) AJKBookDataController *dataController;
 
 @end
