@@ -109,9 +109,10 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+    if ([[segue identifier] isEqualToString:@"ShowBookDetails"]) {
         AJKDetailViewController *detailViewController = [segue destinationViewController];
         detailViewController.book = [self.dataController bookAtIndex:[self.tableView indexPathForSelectedRow].row];
+        // NSLog(@"%@", [[self.dataController bookAtIndex:[self.tableView indexPathForSelectedRow].row] description]);  // sanity check
     }
 }
 
